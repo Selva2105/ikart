@@ -26,7 +26,7 @@ const SignInPage: React.FC = () => {
             console.log("Values", email, password);
 
             const response = await axios.post(
-                `http://localhost:3021/api/v1/auth`, {
+                `${url}api/v1/auth`, {
                 email: email,
                 password: password
             }
