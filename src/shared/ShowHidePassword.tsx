@@ -1,10 +1,10 @@
-import React, { MouseEventHandler, useState } from 'react';
+import React, { ChangeEvent, MouseEventHandler, useState } from 'react';
 import { InputType } from '../Types/default.types';
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
 
 interface InputProps {
-    onChange?: (value: string) => void;
+    onChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onToggle?: MouseEventHandler<SVGElement>;
     value?: string | number;
     labelText?: string;
@@ -60,7 +60,7 @@ const ShowHidePassword: React.FC<InputProps> = ({
                     id={String(id)}
                     name={name}
                     value={value as string}
-                    onChange={(e) => onChange(e.target.value)}
+                    onChange={(e) => onChange(e)}
                     placeholder={placeholder}
                     className={`w-full focus:outline-none ${inputClass}`}
                     onFocus={() => setIsInputFocused(true)}

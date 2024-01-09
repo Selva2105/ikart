@@ -42,13 +42,37 @@ const SignInPage: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 font-inter ">
             <div className="max-w-lg w-full p-6 space-y-6 bg-white rounded-lg border-2 border-gray-500">
                 <h2 className="text-xl font-bold text-center text-gray-900">Sign in</h2>
+                <p className='text-sm text-center !my-2'>Hey chief, welcome back to iKart 🙋</p>
+
                 <form onSubmit={handleSubmit} className="space-y-4">
 
-                    <Input isRequired={true} placeholder='Enter your email' type='email' id='email' labelText='Email' labelClass='!text-sm' onChange={(val) => setEmail(val)} />
+                    <Input
+                        isRequired={true}
+                        placeholder='Enter your email'
+                        type='email'
+                        id='email'
+                        labelText='Email'
+                        labelClass='!text-sm'
+                        onChange={(val) => setEmail(val.target.value)}
+                    />
 
-                    <ShowHidePassword isRequired={true} placeholder='Enter your password' id='password' type={show ? 'text' : 'password'} showPassword={show} onToggle={handleTogglePassword} onChange={(val) => setPassword(val)} labelText='Password' labelClass='!text-sm' />
+                    <ShowHidePassword
+                        isRequired={true}
+                        placeholder='Enter your password'
+                        id='password'
+                        type={show ? 'text' : 'password'}
+                        showPassword={show}
+                        onToggle={handleTogglePassword}
+                        onChange={(val) => setPassword(val.target.value)}
+                        labelText='Password'
+                        labelClass='!text-sm' />
 
-                    <Button title='Login' styles='text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300' type='submit' >Login</Button>
+                    <Button
+                        title='Login'
+                        styles='text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300'
+                        type='submit' >
+                        Login
+                    </Button>
 
                 </form>
 
@@ -64,7 +88,7 @@ const SignInPage: React.FC = () => {
 
 
                 <div className="w-full">
-                    <Button title='google' styles='w-full font-medium border-2 border-gray-500 rounded-lg py-2 hover:bg-ash_gray hover:text-white hover:border-ash_gray' ><span className='flex flex-row justify-evenly items-center '><RiGoogleFill className='w-6 h-8' /> <p>Sign in with google</p> </span></Button>
+                    <Button title='google' styles='w-full font-medium border-2 border-gray-500 rounded-lg py-2 hover:bg-ash_gray hover:text-white hover:border-ash_gray' ><span className='flex flex-row justify-center gap-4 items-center '><RiGoogleFill className='w-6 h-8' /> <p>Sign in with google</p> </span></Button>
                 </div>
 
             </div>
