@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import Input from '../../shared/Input';
-import ShowHidePassword from '../../shared/ShowHidePassword';
-import Button from '../../shared/Button';
 import { RiGoogleFill } from "react-icons/ri";
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+
+import Input from '../../shared/Input';
+import ShowHidePassword from '../../shared/ShowHidePassword';
+import Button from '../../shared/Button';
+
 
 const SignInPage: React.FC = () => {
 
-    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [show, setShow] = useState<boolean>(false);
 
@@ -18,23 +20,23 @@ const SignInPage: React.FC = () => {
 
     const url = process.env.REACT_APP_API_URL;
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const { handleSubmit, control, formState: { errors } } = useForm();
 
+    const onSubmit = async(data: any) => {
+        console.log(data);
 
         try {
-            console.log("Values", email, password);
-
             const response = await axios.post(
-                `${url}api/v1/auth`, {
-                email: email,
-                password: password
-            }
+                `${url}api/v1/auth`, { data }
             );
 
-            console.log("Async operation completed", response);
+            if(response.status === 201){
+                localStorage.setItem('token',response.data?.token)
+            }
+
+            console.log(response);
         } catch (error) {
-            console.error("Error during async operation", error);
+            console.error("Error", error);
         }
     };
 
@@ -44,33 +46,56 @@ const SignInPage: React.FC = () => {
                 <h2 className="text-xl font-bold text-center text-gray-900">Sign in</h2>
                 <p className='text-sm text-center !my-2'>Hey chief, welcome back to iKart 🙋</p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-                    <Input
-                        isRequired={true}
-                        placeholder='Enter your email'
-                        type='email'
-                        id='email'
-                        labelText='Email'
-                        labelClass='!text-sm'
-                        onChange={(val) => setEmail(val.target.value)}
+                    <Controller
+                        name="email"
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: 'Email is required' }}
+                        render={({ field }) => (
+                            <Input
+                                isRequired={true}
+                                placeholder='Enter your email'
+                                type='email'
+                                id='email'
+                                labelText='Email'
+                                labelClass='!text-sm'
+                                onChange={field.onChange}
+                                value={field.value}
+                                error={errors.email?.message}
+                            />
+                        )}
                     />
 
-                    <ShowHidePassword
-                        isRequired={true}
-                        placeholder='Enter your password'
-                        id='password'
-                        type={show ? 'text' : 'password'}
-                        showPassword={show}
-                        onToggle={handleTogglePassword}
-                        onChange={(val) => setPassword(val.target.value)}
-                        labelText='Password'
-                        labelClass='!text-sm' />
+                    <Controller
+                        name="password"
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: 'Password is required' }}
+                        render={({ field }) => (
+                            <ShowHidePassword
+                                isRequired={true}
+                                placeholder='Enter your password'
+                                id='password'
+                                type={show ? 'text' : 'password'}
+                                showPassword={show}
+                                onToggle={handleTogglePassword}
+                                value={field.value}
+                                onChange={field.onChange}
+                                labelText='Password'
+                                labelClass='!text-sm'
+                                error={errors.password?.message}
+
+                            />
+                        )}
+                    />
 
                     <Button
                         title='Login'
                         styles='text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300'
-                        type='submit' >
+                        type='submit'
+                    >
                         Login
                     </Button>
 
