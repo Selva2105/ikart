@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import assuredBandage from '../../assets/assuredBandage.svg';
 import { FaMobileAlt } from 'react-icons/fa';
 import { GiClothes } from "react-icons/gi";
@@ -36,7 +36,6 @@ const renderIcon = (title: string) => {
 
 const CategoryCard: React.FC<CardProps> = ({ title }) => {
     const { icon, products } = renderIcon(title);
-    const [categoryProducts, setCategoryProducts] = useState(products);
 
     return (
         <div className='bg-[#E9E9E9] px-6 py-4 w-full md:w-[31%] lg:w-[30%] xl:w-1/5 font-inter rounded-lg cursor-pointer hover:shadow-lg'>
@@ -47,7 +46,7 @@ const CategoryCard: React.FC<CardProps> = ({ title }) => {
             <div className='flex flex-col gap-2'>
                 <h2>{icon}</h2>
                 <h2 className='text-sm font-semibold'>{title}</h2>
-                <p className='text-[0.7rem]'>{categoryProducts.join(', ')}</p>
+                <p className='text-[0.7rem]'>{products.join(', ')}</p>
             </div>
         </div>
     );

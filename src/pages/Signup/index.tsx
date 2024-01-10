@@ -55,7 +55,9 @@ const Signup = () => {
             }
             );
 
-            console.log("Async operation completed", response);
+            console.log(response);
+            
+
         } catch (error) {
             console.error("Error during async operation", error);
         }

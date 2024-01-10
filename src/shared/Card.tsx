@@ -41,8 +41,6 @@ const Card: React.FC<CardProps> = ({ data }) => {
         const filledStars = Math.round(rating);
         const emptyStars = maxStars - filledStars;
 
-        console.log(filledStars, emptyStars, "Rating");
-
         return (
             <div className="flex">
                 {[...Array(Math.max(filledStars, 0))].map((_, index) => (

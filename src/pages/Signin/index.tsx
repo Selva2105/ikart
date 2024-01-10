@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
 import { RiGoogleFill } from "react-icons/ri";
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 
 import Input from '../../shared/Input';
 import ShowHidePassword from '../../shared/ShowHidePassword';
 import Button from '../../shared/Button';
+import Alert from '../../shared/Alert';
+import Loader from '../../shared/Loader';
 
 
 const SignInPage: React.FC = () => {
 
-    const [password, setPassword] = useState<string>('');
+    const [error, setError] = useState<string>('');
     const [show, setShow] = useState<boolean>(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const handleTogglePassword = () => {
         setShow((prev) => !prev);
@@ -20,23 +24,43 @@ const SignInPage: React.FC = () => {
 
     const url = process.env.REACT_APP_API_URL;
 
-    const { handleSubmit, control, formState: { errors } } = useForm();
+    const { handleSubmit, control, formState: { errors }, reset } = useForm();
 
-    const onSubmit = async(data: any) => {
-        console.log(data);
+    const navigate = useNavigate()
 
+    const onSubmit = async (data: any) => {
         try {
+            setLoading(true); // Set loading to true on form submission
+            const { email, password } = data;
+
             const response = await axios.post(
-                `${url}api/v1/auth`, { data }
+                `${url}api/v1/auth`,
+                { email, password }
             );
 
-            if(response.status === 201){
-                localStorage.setItem('token',response.data?.token)
+            if (response.status === 201) {
+                reset({ ...data, password: '' });
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('email', email);
+                setShowAlert(true);
             }
 
-            console.log(response);
+            setTimeout(() => {
+                navigate('/');
+            }, 3000);
+
         } catch (error) {
-            console.error("Error", error);
+            setLoading(false);
+            if (axios.isAxiosError(error) && error.response) {
+                // Axios error with response
+                setError(error.response.data.message);
+                reset({ ...data, password: '' });
+            } else {
+                // Non-Axios error or no response property
+                setError("An error occurred");
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -45,6 +69,8 @@ const SignInPage: React.FC = () => {
             <div className="max-w-lg w-full p-6 space-y-6 bg-white rounded-lg border-2 border-gray-500">
                 <h2 className="text-xl font-bold text-center text-gray-900">Sign in</h2>
                 <p className='text-sm text-center !my-2'>Hey chief, welcome back to iKart 🙋</p>
+
+                <p className='text-sm text-center !my-2 text-red-500'>{error}</p>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
@@ -93,10 +119,11 @@ const SignInPage: React.FC = () => {
 
                     <Button
                         title='Login'
-                        styles='text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300'
+                        styles={`text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300 ${loading ? 'hover:!bg-hunyadi_yellow-500' : ""}`}
                         type='submit'
+                        disabled={loading}
                     >
-                        Login
+                        {loading ? <Loader color='white' className='!h-6 !w-6' /> : 'Login'}
                     </Button>
 
                 </form>
@@ -115,6 +142,9 @@ const SignInPage: React.FC = () => {
                 <div className="w-full">
                     <Button title='google' styles='w-full font-medium border-2 border-gray-500 rounded-lg py-2 hover:bg-ash_gray hover:text-white hover:border-ash_gray' ><span className='flex flex-row justify-center gap-4 items-center '><RiGoogleFill className='w-6 h-8' /> <p>Sign in with google</p> </span></Button>
                 </div>
+
+                <Alert setShowAlert={setShowAlert} showAlert={showAlert} color="hunyadi_yellow" content="Logged in succesfully !!" />
+
 
             </div>
         </div>

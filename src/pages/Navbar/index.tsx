@@ -1,15 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavItem from "./NavItem";
 import { navLinks, navBtns } from "./data";
 import Input from "../../shared/Input";
 import { useNavigate } from "react-router-dom";
 import Button from "../../shared/Button";
 import MenuSlider from "./MenuSlider";
+import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../state/store";
+import { useSelector } from "react-redux";
+import { fetchUserDetails } from "../../state/userSlice/UserSlice";
+import { User } from "../../Types/default.types";
+import ProfileDropdown from "../../shared/ProfileDropdown";
+import { RiUser3Fill } from "react-icons/ri";
+import { RiShoppingBagFill } from "react-icons/ri";
+import { RiHeartFill } from "react-icons/ri";
+import { RiBookmark3Fill } from "react-icons/ri";
 
 const Navbar: React.FC<{}> = () => {
     const navigate = useNavigate();
 
-    const [openNav, setOpenNav] = useState(false)
+    const [openNav, setOpenNav] = useState(false);
+
+    const url = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token')
+
+    const dispatch = useDispatch<AppDispatch>();
+    const userCredential = useSelector((state: RootState) => state.userCredential.userCredential) as User;
+
+    const options = [
+        { label: 'Profile', action: '/profile', icon: <RiUser3Fill /> },
+        { label: 'Your orders', action: '/yourOrders', icon: <RiShoppingBagFill /> },
+        { label: 'Wishlist', action: '/wishlist', icon: <RiHeartFill /> },
+        { label: 'Premium', action: '/premium', icon: <RiBookmark3Fill className="text-hunyadi_yellow-400" /> },
+    ];
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await dispatch(fetchUserDetails({ url, token }));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchData();
+    }, [dispatch, url, token]);
+
+    console.log("user", userCredential);
 
     return (
         <>
@@ -59,23 +96,31 @@ const Navbar: React.FC<{}> = () => {
                 </div>
 
                 <div className="hidden lg:flex justify-end">
-
                     <div id="btns-container" className='flex gap-8'>
-                        {navBtns.btns.map((btn, index) => (
-                            <Button
-                                key={index}
-                                title={btn.label}
-                                styles='!rounded-2xl font-medium font-inter text-sm px-4 py-1'
-                                variant={`${index === 0 ? 'outlined' : 'solid'}`}
-                                handleClick={() => {
-                                    navigate(btn.url)
-                                }}
-                            >
-                                {btn.label}
-                            </Button>
-                        ))}
+                        {token ? (
+                            userCredential ? (
+                                <div className="">
+                                    <ProfileDropdown profile={userCredential.userName} options={options} />
+                                </div>
+                            ) : (
+                                <span>Loading...</span>
+                            )
+                        ) : (
+                            navBtns.btns.map((btn, index) => (
+                                <Button
+                                    key={index}
+                                    title={btn.label}
+                                    styles='!rounded-2xl font-medium font-inter text-sm px-4 py-1'
+                                    variant={`${index === 0 ? 'outlined' : 'solid'}`}
+                                    handleClick={() => {
+                                        navigate(btn.url);
+                                    }}
+                                >
+                                    {btn.label}
+                                </Button>
+                            ))
+                        )}
                     </div>
-
                 </div>
 
                 <div className="flex xl:hidden items-end">

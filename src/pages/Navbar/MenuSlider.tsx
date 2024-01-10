@@ -3,6 +3,10 @@ import { navBtns, navLinks } from './data';
 import NavItem from './NavItem';
 import Button from '../../shared/Button';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../state/store';
+import { User } from '../../Types/default.types';
+import ProfileDropdown from '../../shared/ProfileDropdown';
 
 interface sliderProps {
     openNav: boolean;
@@ -10,7 +14,18 @@ interface sliderProps {
 }
 
 const MenuSlider: React.FC<sliderProps> = ({ openNav, setOpenNav }) => {
+
     const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+    const userCredential = useSelector((state: RootState) => state.userCredential.userCredential) as User;
+
+    const options = [
+        { label: 'Profile', action: '/profile' },
+        { label: 'Your orders', action: '/yourOrders' },
+        { label: 'Wishlist', action: '/wishlist' },
+        { label: 'Premium', action: '/premium' },
+        { label: 'Sign out', action: '/signout' },
+    ];
 
     return (
         <div
@@ -24,20 +39,30 @@ const MenuSlider: React.FC<sliderProps> = ({ openNav, setOpenNav }) => {
                     ))}
                 </div>
 
-                <div id="btns-container" className='flex lg:hidden gap-8'>
-                    {navBtns.btns.map((btn, index) => (
-                        <Button
-                            key={index}
-                            title={btn.label}
-                            styles='rounded-2xl font-medium font-inter text-sm px-4 py-1'
-                            variant={`${index === 0 ? 'outlined' : 'solid'}`}
-                            handleClick={() => {
-                                navigate(btn.url)
-                            }}
-                        >
-                            {btn.label}
-                        </Button>
-                    ))}
+                <div id="btns-container" className='flex gap-8'>
+                    {token ? (
+                        userCredential ? (
+                            <div className="">
+                                <ProfileDropdown profile={userCredential.userName} options={options} />
+                            </div>
+                        ) : (
+                            <span>Loading...</span>
+                        )
+                    ) : (
+                        navBtns.btns.map((btn, index) => (
+                            <Button
+                                key={index}
+                                title={btn.label}
+                                styles='!rounded-2xl font-medium font-inter text-sm px-4 py-1'
+                                variant={`${index === 0 ? 'outlined' : 'solid'}`}
+                                handleClick={() => {
+                                    navigate(btn.url);
+                                }}
+                            >
+                                {btn.label}
+                            </Button>
+                        ))
+                    )}
                 </div>
             </div>
 

@@ -35,7 +35,7 @@ const OurService = () => {
 
             <div className="flex flex-col">
               {data.map((data, index) => (
-                <div className='flex flex-row gap-2 items-center'>
+                <div key={index} className='flex flex-row gap-2 items-center'>
                   <img src={data.icon} alt={data.label} />
                   <p key={index} className='text-xs my-2'>{data.label}</p>
                 </div>
