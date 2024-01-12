@@ -3,33 +3,23 @@ import React, { useState } from 'react'
 import Input from '../../shared/Input';
 import ShowHidePassword from '../../shared/ShowHidePassword';
 import Button from '../../shared/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RiGoogleFill } from 'react-icons/ri';
 import Dropdown from '../../shared/DropDown';
 import DateInput from '../../shared/DateInput';
 import CheckBox from '../../shared/CheckBox';
+import { useForm, Controller } from 'react-hook-form';
+import Loader from '../../shared/Loader';
+import { toast } from 'react-toastify';
+
 
 const Signup = () => {
 
-    const [firstName, setFirstName] = useState<string>('');
-    const [lastName, setLastName] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-    const [phoneNumberCode, setPhoneNumberCode] = useState<string>('+91');
-    const [dob, setDob] = useState<{
-        startDate: Date | null;
-        endDate: Date | null;
-    }>({
-        startDate: null,
-        endDate: null
-    });
-    const [isChecked, setIsChecked] = useState<boolean>(false)
-    const [phoneNumber, setPhoneNumber] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const { handleSubmit, control, formState: { errors } } = useForm();
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
     const [show, setShow] = useState<boolean>(false);
-
     const options = ['+91', '+94', '+977'];
-
 
     const handleTogglePassword = () => {
         setShow((prev) => !prev);
@@ -37,29 +27,58 @@ const Signup = () => {
 
     const url = process.env.REACT_APP_API_URL;
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const navigate = useNavigate()
+
+
+    const onSubmit = async (data: any) => {
 
         try {
+            setLoading(true); // Set loading to true on form submission
             const response = await axios.post(
                 `${url}api/v1/user`, {
-                userName: firstName +" "+ lastName,
-                email: email,
+                userName: data.firstName + " " + data.lastName,
+                email: data.email,
                 phoneNumber: {
-                    CountryCode: phoneNumberCode,
-                    Number: phoneNumber
+                    CountryCode: data.phoneNumberCode,
+                    Number: data.phoneNumber
                 },
-                dob: dob.startDate,
-                password: password,
-                confirmPassword: confirmPassword
+                dob: data.dob.startDate,
+                password: data.password,
+                confirmPassword: data.confirmPassword,
+                policyStatus: data.isChecked
             }
             );
 
-            console.log(response);
-            
+            if(response.status === 201){
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('email', data.email);
+                toast(`${response.data.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+
+            setTimeout(() => {
+                navigate('/');
+            }, 3000);
 
         } catch (error) {
-            console.error("Error during async operation", error);
+            setLoading(false);
+            if (axios.isAxiosError(error) && error.response) {
+                // Axios error with response
+                setError(error.response.data.message);
+            } else {
+                // Non-Axios error or no response property
+                setError("An error occurred");
+            }
+        } finally {
+            setLoading(false);
         }
 
     };
@@ -70,22 +89,83 @@ const Signup = () => {
                 <h2 className="text-xl font-bold text-center text-gray-900">Sign up</h2>
                 <p className='text-sm text-center !my-2'>Hey chief, welcome to iKart 🤗</p>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <p className='text-sm text-center !my-2 text-red-500'>{error}</p>
+
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
                     <div className="w-full flex flex-col md:flex-row gap-4">
 
                         <div className="w-full md:w-2/4">
-                            <Input isRequired={true} placeholder='Enter your first name' type='text' id='firstName' labelText='First name' labelClass='!text-sm' onChange={(val) => setFirstName(val.target.value)} />
+
+                            <Controller
+                                name="firstName"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Email is required' }}
+                                render={({ field }) => (
+                                    <Input
+                                        isRequired={true}
+                                        placeholder='Enter your first name'
+                                        type='text'
+                                        id='firstName'
+                                        labelText='First name'
+                                        labelClass='!text-sm'
+                                        onChange={field.onChange}
+                                        value={field.value}
+                                        error={errors.firstName?.message}
+                                    />
+                                )}
+                            />
+
                         </div>
 
                         <div className="w-full md:w-2/4">
-                            <Input isRequired={true} placeholder='Enter your last name' type='text' id='lastName' labelText='Last name' labelClass='!text-sm' onChange={(val) => setLastName(val.target.value)} />
+
+                            <Controller
+                                name="lastName"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Email is required' }}
+                                render={({ field }) => (
+                                    <Input
+                                        isRequired={true}
+                                        placeholder='Enter your last name'
+                                        type='text'
+                                        id='lastName'
+                                        labelText='Last name'
+                                        labelClass='!text-sm'
+                                        onChange={field.onChange}
+                                        value={field.value}
+                                        error={errors.lastName?.message}
+                                    />
+                                )}
+                            />
+
                         </div>
 
                     </div>
 
                     <div className="w-full">
-                        <Input isRequired={true} placeholder='Enter your email' type='email' id='email' labelText='Email' labelClass='!text-sm' onChange={(val) => setEmail(val.target.value)} />
+
+                        <Controller
+                            name="email"
+                            control={control}
+                            defaultValue=""
+                            rules={{ required: 'Email is required' }}
+                            render={({ field }) => (
+                                <Input
+                                    isRequired={true}
+                                    placeholder='Enter your email'
+                                    type='email'
+                                    id='email'
+                                    labelText='Email'
+                                    labelClass='!text-sm'
+                                    onChange={field.onChange}
+                                    value={field.value}
+                                    error={errors.email?.message}
+                                />
+                            )}
+                        />
 
                     </div>
 
@@ -95,36 +175,138 @@ const Signup = () => {
                             <span className="text-red-500">*</span>
                         </label>
 
-                        <div className="flex flex-row">
+                        <div className="flex flex-row items-end">
 
                             <div className="w-[15%">
-                                <Dropdown options={options} isRequired={true} className='!rounded-tr-none !rounded-br-none' onChange={(val) => setPhoneNumberCode(val.target.value)} />
+
+                                <Controller
+                                    name="phoneNumberCode"
+                                    control={control}
+                                    defaultValue="+91"
+                                    render={({ field }) => (
+                                        <Dropdown
+                                            isRequired={true}
+                                            options={options}
+                                            className='!rounded-tr-none !rounded-br-none'
+                                            onChange={field.onChange}
+                                        />
+                                    )}
+                                />
                             </div>
 
                             <div className="w-full">
-                                <Input isRequired={true} placeholder='Enter your phone number' type='number' id='phoneNumber' onChange={(val) => setPhoneNumber(val.target.value)} inputClass='!rounded-tl-none !rounded-bl-none !border-l-0 ' />
+
+                                <Controller
+                                    name="phoneNumber"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{ required: 'Phone number is required' }}
+                                    render={({ field }) => (
+                                        <Input
+                                            isRequired={true}
+                                            placeholder='Enter your phone number'
+                                            type='number'
+                                            id='phoneNumber'
+                                            inputClass='!rounded-tl-none !rounded-bl-none !border-l-0 '
+                                            onChange={field.onChange}
+                                            value={field.value}
+                                            error={errors.phoneNumber?.message}
+                                        />
+                                    )}
+                                />
+
                             </div>
 
                         </div>
 
                     </div>
 
-                    <DateInput dateValue={dob} setDateValue={setDob} isRequired={true} labelText='Date of birth' />
+                    <Controller
+                        name="dob"
+                        control={control}
+                        defaultValue={{ startDate: null, endDate: null }}
+                        rules={{ required: 'DOB is required' }}
+                        render={({ field }) => (
+                            <DateInput
+                                dateValue={field.value}
+                                setDateValue={(value) => field.onChange(value)}
+                                labelText="Date of birth"
+                                labelFor="dob"
+                                labelClass="!text-sm"
+                                error={errors.dob?.message}
+                                isRequired={true}
+                                showShortCuts={false}
+                            />
+                        )}
+                    />
 
-                    <ShowHidePassword isRequired={true} placeholder='Enter your password' id='password' type={show ? 'text' : 'password'} showPassword={show} onToggle={handleTogglePassword} onChange={(val) => setPassword(val.target.value)} labelText='Password' labelClass='!text-sm' />
+                    <Controller
+                        name="password"
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: 'Password is required' }}
+                        render={({ field }) => (
+                            <ShowHidePassword
+                                isRequired={true}
+                                placeholder='Enter your password'
+                                id='password'
+                                type={show ? 'text' : 'password'}
+                                showPassword={show}
+                                onToggle={handleTogglePassword}
+                                labelText='Password'
+                                labelClass='!text-sm'
+                                onChange={field.onChange}
+                                value={field.value}
+                                error={errors.password?.message}
+                            />
+                        )}
+                    />
 
-                    <Input isRequired={true} placeholder='Enter your confirm password' id='confirmPassword' type={'password'} onChange={(val) => setConfirmPassword(val.target.value)} labelText='Confirm password' labelClass='!text-sm' />
+                    <Controller
+                        name="confirmPassword"
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: 'Confirm Password is required' }}
+                        render={({ field }) => (
+                            <Input
+                                isRequired={true}
+                                placeholder='Enter your confirm password'
+                                id='confirmPassword'
+                                type={'password'}
+                                onChange={field.onChange}
+                                value={field.value}
+                                error={errors.confirmPassword?.message}
+                                labelText='Confirm password'
+                                labelClass='!text-sm'
+                            />
+
+                        )}
+                    />
 
                     <div className="">
-                        <CheckBox isChecked={isChecked} placeholder='Accept the policy to create your account' setIsChecked={setIsChecked} className='!w-[0.85rem]' />
+                        <Controller
+                            name="isChecked"
+                            control={control}
+                            defaultValue={false}
+                            render={({ field }) => (
+                                <CheckBox
+                                    isChecked={field.value}
+                                    onChange={field.onChange}
+                                    placeholder='Accept the policy to create your account'
+                                    className='!w-[0.85rem]'
+                                />
+
+                            )}
+                        />
+
                     </div>
 
-                    <Button title='Login' styles='text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300' type='submit' >Login</Button>
+                    <Button title='Login' styles={`text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300 ${loading ? 'hover:!bg-hunyadi_yellow-500' : ""}`} type='submit' >{loading ? <Loader color='white' className='!h-6 !w-6' /> : 'Sign in'}</Button>
 
                 </form>
 
                 <div className="text-xs">
-                    Already having an iKart account ? click here to <Link to='/signup' className='text-princeton_orange-600'> Login </Link>
+                    Already having an iKart account ? click here to <Link to='/signup' className='text-princeton_orange-600'> Sign in </Link>
                 </div>
 
                 <div className="flex items-center justify-between w-full">

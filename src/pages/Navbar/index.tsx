@@ -42,7 +42,6 @@ const Navbar: React.FC<{}> = () => {
                 console.log(error);
             }
         };
-
         fetchData();
     }, [dispatch, url, token]);
 

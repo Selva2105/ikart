@@ -28,7 +28,6 @@ export interface CardProps {
 const Card: React.FC<CardProps> = ({ data }) => {
 
     const url = process.env.REACT_APP_API_URL;
-    const slicedText = `${data?.description?.slice(0, 35)}...`;
 
     const calculateTotalReviews = (): number => {
         return data?.ratings?.length || 0;
@@ -54,7 +53,7 @@ const Card: React.FC<CardProps> = ({ data }) => {
     };
 
     return (
-        <div className='border-2 w-full md:w-[48%] lg:w-[32%] xl:w-[24%] p-3 rounded-md cursor-pointer flex flex-col font-inter gap-6 h-fit'>
+        <div className='border-2 w-full md:w-[48%] lg:w-[32%] p-3 rounded-md cursor-pointer flex flex-col font-inter gap-6 h-fit'>
             <div className='w-full h-60'>
                 <img
                     src={`${url}${data?.images}`}
@@ -63,9 +62,9 @@ const Card: React.FC<CardProps> = ({ data }) => {
             </div>
 
             <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 ">
                     <h2 className='text-xs font-semibold font-inter'>{data?.name}</h2>
-                    <p className='text-xs font-inter'>{slicedText}</p>
+                    <p className='text-xs font-inter overflow-hidden whitespace-nowrap text-ellipsis max-w-[300px]'>{data?.description}</p>
                 </div>
                 <div className="flex">
                     <FaRegHeart className='w-4 h-4' />

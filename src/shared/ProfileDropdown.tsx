@@ -26,7 +26,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
   };
 
   const handleSignOut = async () => {
-    debugger
     try {
       const token = localStorage.getItem('token');
       if (!token) {

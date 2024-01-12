@@ -41,7 +41,7 @@ const TrendingProduct = () => {
             {status === 'failed' && <div>Error: {error}</div>}
 
             {status === "succeeded" &&
-                <div className="flex flex-wrap flex-row gap-4 mt-6 justify-between">
+                <div className="flex flex-wrap flex-row gap-4 mt-6 justify-start">
                     {trendingProduct.length > 0 ? (
                         trendingProduct.map((data: any, index: number) => (
                             <Card key={index} data={data} />

@@ -7,15 +7,14 @@ import { useForm, Controller } from 'react-hook-form';
 import Input from '../../shared/Input';
 import ShowHidePassword from '../../shared/ShowHidePassword';
 import Button from '../../shared/Button';
-import Alert from '../../shared/Alert';
 import Loader from '../../shared/Loader';
+import { toast } from 'react-toastify';
 
 
 const SignInPage: React.FC = () => {
 
     const [error, setError] = useState<string>('');
     const [show, setShow] = useState<boolean>(false);
-    const [showAlert, setShowAlert] = useState(false);
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleTogglePassword = () => {
@@ -42,7 +41,16 @@ const SignInPage: React.FC = () => {
                 reset({ ...data, password: '' });
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('email', email);
-                setShowAlert(true);
+                toast(`${response.data.message}`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             }
 
             setTimeout(() => {
@@ -142,9 +150,6 @@ const SignInPage: React.FC = () => {
                 <div className="w-full">
                     <Button title='google' styles='w-full font-medium border-2 border-gray-500 rounded-lg py-2 hover:bg-ash_gray hover:text-white hover:border-ash_gray' ><span className='flex flex-row justify-center gap-4 items-center '><RiGoogleFill className='w-6 h-8' /> <p>Sign in with google</p> </span></Button>
                 </div>
-
-                <Alert setShowAlert={setShowAlert} showAlert={showAlert} color="hunyadi_yellow" content="Logged in succesfully !!" />
-
 
             </div>
         </div>
