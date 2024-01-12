@@ -62,20 +62,28 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
 
       {dropdownVisible && (
         <div className="absolute top-12 sm:left-0 md:left-auto md:right-0 bg-white border border-gray-200 p-2 rounded w-max">
-          <ul className="list-none p-0 m-0">
-            {options.map((option, index) => (
-              <li key={index} className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
-                <Link to={option.action}>
-                  {option.label}
-                </Link>
-                {option.icon}
+          {profile ? (
+            <ul className="list-none p-0 m-0">
+              {options.map((option, index) => (
+                <li key={index} className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
+                  <Link to={option.action}>
+                    {option.label}
+                  </Link>
+                  {option.icon}
+                </li>
+              ))}
+              <Button styles='cursor-pointer p-2 rounded-lg flex flex-row justify-between items-center gap-6 bg-red-500 w-full hover:bg-transparent hover:text-red-500 text-white hover:text-red-500 hover:border-red-500 border-2' title='Sign out' handleClick={handleSignOut} >
+                <span>Sign out</span>
+                {<RiUserSharedFill className='' />}
+              </Button>
+            </ul>) : (
+            <ul className="list-none p-0 m-0">
+              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
+                Hey chief, verify your email to continue ..!
               </li>
-            ))}
-            <Button styles='cursor-pointer p-2 rounded-lg flex flex-row justify-between items-center gap-6 bg-red-500 w-full hover:bg-transparent hover:text-red-500 text-white hover:text-red-500 hover:border-red-500 border-2' title='Sign out' handleClick={handleSignOut} >
-              <span>Sign out</span>
-              {<RiUserSharedFill className='' />}
-            </Button>
-          </ul>
+            </ul>
+          )
+          }
         </div>
       )}
 

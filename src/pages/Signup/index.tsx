@@ -17,6 +17,7 @@ const Signup = () => {
 
     const { handleSubmit, control, formState: { errors } } = useForm();
     const [error, setError] = useState<string>('');
+    const [res, setRes] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [show, setShow] = useState<boolean>(false);
     const options = ['+91', '+94', '+977'];
@@ -49,7 +50,7 @@ const Signup = () => {
             }
             );
 
-            if(response.status === 201){
+            if (response.status === 201) {
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('email', data.email);
                 toast(`${response.data.message}`, {
@@ -64,9 +65,11 @@ const Signup = () => {
                 });
             }
 
+            setRes('User created go to ur email and verify to enjoy all features')
+
             setTimeout(() => {
                 navigate('/');
-            }, 3000);
+            }, 6000);
 
         } catch (error) {
             setLoading(false);
@@ -90,6 +93,7 @@ const Signup = () => {
                 <p className='text-sm text-center !my-2'>Hey chief, welcome to iKart 🤗</p>
 
                 <p className='text-sm text-center !my-2 text-red-500'>{error}</p>
+                {res && <p className='text-sm text-center !my-2 text-white bg-green-500 hover:bg-green-300 py-2 rounded-lg'>{res}</p>}
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
