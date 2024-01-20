@@ -95,7 +95,7 @@ const Signup = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 font-inter mt-20">
-            <div className="max-w-xl w-full p-6 space-y-6 bg-white rounded-lg border-2 border-gray-500">
+            <div className="max-w-5xl w-full p-6 space-y-6 bg-white rounded-lg border-2 border-gray-500">
                 <h2 className="text-xl font-bold text-center text-gray-900">Sign up</h2>
                 <p className='text-sm text-center !my-2'>Hey chief, welcome to iKart 🤗</p>
 
@@ -105,123 +105,50 @@ const Signup = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" encType="multipart/form-data">
 
                     <div className="w-full flex flex-col md:flex-row gap-4">
+                        <div className="w-full md:w-[80%] flex flex-col md:flex-row gap-4">
 
-                        <div className="w-full md:w-2/4">
-
-                            <Controller
-                                name="firstName"
-                                control={control}
-                                defaultValue=""
-                                rules={{ required: 'Email is required' }}
-                                render={({ field }) => (
-                                    <Input
-                                        isRequired={true}
-                                        placeholder='Enter your first name'
-                                        type='text'
-                                        id='firstName'
-                                        labelText='First name'
-                                        labelClass='!text-sm'
-                                        onChange={field.onChange}
-                                        value={field.value}
-                                        error={errors.firstName?.message}
-                                    />
-                                )}
-                            />
-
-                        </div>
-
-                        <div className="w-full md:w-2/4">
-
-                            <Controller
-                                name="lastName"
-                                control={control}
-                                defaultValue=""
-                                rules={{ required: 'Email is required' }}
-                                render={({ field }) => (
-                                    <Input
-                                        isRequired={true}
-                                        placeholder='Enter your last name'
-                                        type='text'
-                                        id='lastName'
-                                        labelText='Last name'
-                                        labelClass='!text-sm'
-                                        onChange={field.onChange}
-                                        value={field.value}
-                                        error={errors.lastName?.message}
-                                    />
-                                )}
-                            />
-
-                        </div>
-
-                    </div>
-
-                    <div className="w-full">
-
-                        <Controller
-                            name="email"
-                            control={control}
-                            defaultValue=""
-                            rules={{ required: 'Email is required' }}
-                            render={({ field }) => (
-                                <Input
-                                    isRequired={true}
-                                    placeholder='Enter your email'
-                                    type='email'
-                                    id='email'
-                                    labelText='Email'
-                                    labelClass='!text-sm'
-                                    onChange={field.onChange}
-                                    value={field.value}
-                                    error={errors.email?.message}
-                                />
-                            )}
-                        />
-
-                    </div>
-
-                    <div className="w-full">
-                        <label className={`text-sm font-medium leading-6 flex gap-1 text-black mt-4`}>
-                            Phone number
-                            <span className="text-red-500">*</span>
-                        </label>
-
-                        <div className="flex flex-row items-end">
-
-                            <div className="w-[15%">
+                            <div className="w-full md:w-2/4 ">
 
                                 <Controller
-                                    name="phoneNumberCode"
-                                    control={control}
-                                    defaultValue="+91"
-                                    render={({ field }) => (
-                                        <Dropdown
-                                            isRequired={true}
-                                            options={options}
-                                            className='!rounded-tr-none !rounded-br-none'
-                                            onChange={field.onChange}
-                                        />
-                                    )}
-                                />
-                            </div>
-
-                            <div className="w-full">
-
-                                <Controller
-                                    name="phoneNumber"
+                                    name="firstName"
                                     control={control}
                                     defaultValue=""
-                                    rules={{ required: 'Phone number is required' }}
+                                    rules={{ required: 'Email is required' }}
                                     render={({ field }) => (
                                         <Input
                                             isRequired={true}
-                                            placeholder='Enter your phone number'
-                                            type='number'
-                                            id='phoneNumber'
-                                            inputClass='!rounded-tl-none !rounded-bl-none !border-l-0 '
+                                            placeholder='Enter your first name'
+                                            type='text'
+                                            id='firstName'
+                                            labelText='First name'
+                                            labelClass='!text-sm'
                                             onChange={field.onChange}
                                             value={field.value}
-                                            error={errors.phoneNumber?.message}
+                                            error={errors.firstName?.message}
+                                        />
+                                    )}
+                                />
+
+                            </div>
+
+                            <div className="w-full md:w-2/4">
+
+                                <Controller
+                                    name="lastName"
+                                    control={control}
+                                    defaultValue=""
+                                    rules={{ required: 'Email is required' }}
+                                    render={({ field }) => (
+                                        <Input
+                                            isRequired={true}
+                                            placeholder='Enter your last name'
+                                            type='text'
+                                            id='lastName'
+                                            labelText='Last name'
+                                            labelClass='!text-sm'
+                                            onChange={field.onChange}
+                                            value={field.value}
+                                            error={errors.lastName?.message}
                                         />
                                     )}
                                 />
@@ -230,26 +157,107 @@ const Signup = () => {
 
                         </div>
 
+                        <div className="w-full md:w-2/4">
+
+                            <Controller
+                                name="email"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Email is required' }}
+                                render={({ field }) => (
+                                    <Input
+                                        isRequired={true}
+                                        placeholder='Enter your email'
+                                        type='email'
+                                        id='email'
+                                        labelText='Email'
+                                        labelClass='!text-sm'
+                                        onChange={field.onChange}
+                                        value={field.value}
+                                        error={errors.email?.message}
+                                    />
+                                )}
+                            />
+
+                        </div>
                     </div>
 
-                    <Controller
-                        name="dob"
-                        control={control}
-                        defaultValue={{ startDate: null, endDate: null }}
-                        rules={{ required: 'DOB is required' }}
-                        render={({ field }) => (
-                            <DateInput
-                                dateValue={field.value}
-                                setDateValue={(value) => field.onChange(value)}
-                                labelText="Date of birth"
-                                labelFor="dob"
-                                labelClass="!text-sm"
-                                error={errors.dob?.message}
-                                isRequired={true}
-                                showShortCuts={false}
+                    <div className="w-full flex flex-col md:flex-row gap-4 items-end">
+
+                        <div className="w-full md:w-2/4">
+                            <label className={`text-sm font-medium leading-6 flex gap-1 text-black mt-4`}>
+                                Phone number
+                                <span className="text-red-500">*</span>
+                            </label>
+
+                            <div className="flex flex-row items-end">
+
+                                <div className="">
+
+                                    <Controller
+                                        name="phoneNumberCode"
+                                        control={control}
+                                        defaultValue="+91"
+                                        render={({ field }) => (
+                                            <Dropdown
+                                                isRequired={true}
+                                                options={options}
+                                                className='!rounded-tr-none !rounded-br-none'
+                                                onChange={field.onChange}
+                                            />
+                                        )}
+                                    />
+                                </div>
+
+                                <div className="w-full">
+
+                                    <Controller
+                                        name="phoneNumber"
+                                        control={control}
+                                        defaultValue=""
+                                        rules={{ required: 'Phone number is required' }}
+                                        render={({ field }) => (
+                                            <Input
+                                                isRequired={true}
+                                                placeholder='Enter your phone number'
+                                                type='number'
+                                                id='phoneNumber'
+                                                inputClass='!rounded-tl-none !rounded-bl-none !border-l-0 '
+                                                onChange={field.onChange}
+                                                value={field.value}
+                                                error={errors.phoneNumber?.message}
+                                            />
+                                        )}
+                                    />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div className="w-full md:w-2/4">
+                            <Controller
+                                name="dob"
+                                control={control}
+                                defaultValue={{ startDate: null, endDate: null }}
+                                rules={{ required: 'DOB is required' }}
+                                render={({ field }) => (
+                                    <DateInput
+                                        dateValue={field.value}
+                                        setDateValue={(value) => field.onChange(value)}
+                                        labelText="Date of birth"
+                                        labelFor="dob"
+                                        labelClass="!text-sm"
+                                        error={errors.dob?.message}
+                                        isRequired={true}
+                                        showShortCuts={false}
+                                    />
+                                )}
                             />
-                        )}
-                    />
+                        </div>
+
+                    </div>
 
                     <Controller
                         name="profileImage"
@@ -260,52 +268,58 @@ const Signup = () => {
                                 onFileChange={(file) => field.onChange(file)}
                                 label="Profile Image"
                                 selectedFile={field.value}
-                            />
-                        )}
-                    />
-
-                    <Controller
-                        name="password"
-                        control={control}
-                        defaultValue=""
-                        rules={{ required: 'Password is required' }}
-                        render={({ field }) => (
-                            <ShowHidePassword
                                 isRequired={true}
-                                placeholder='Enter your password'
-                                id='password'
-                                type={show ? 'text' : 'password'}
-                                showPassword={show}
-                                onToggle={handleTogglePassword}
-                                labelText='Password'
-                                labelClass='!text-sm'
-                                onChange={field.onChange}
-                                value={field.value}
-                                error={errors.password?.message}
                             />
                         )}
                     />
 
-                    <Controller
-                        name="confirmPassword"
-                        control={control}
-                        defaultValue=""
-                        rules={{ required: 'Confirm Password is required' }}
-                        render={({ field }) => (
-                            <Input
-                                isRequired={true}
-                                placeholder='Enter your confirm password'
-                                id='confirmPassword'
-                                type={'password'}
-                                onChange={field.onChange}
-                                value={field.value}
-                                error={errors.confirmPassword?.message}
-                                labelText='Confirm password'
-                                labelClass='!text-sm'
+                    <div className="w-full flex flex-col md:flex-row gap-4 items-end">
+                        <div className="w-full md:w-2/4">
+                            <Controller
+                                name="password"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Password is required' }}
+                                render={({ field }) => (
+                                    <ShowHidePassword
+                                        isRequired={true}
+                                        placeholder='Enter your password'
+                                        id='password'
+                                        type={show ? 'text' : 'password'}
+                                        showPassword={show}
+                                        onToggle={handleTogglePassword}
+                                        labelText='Password'
+                                        labelClass='!text-sm'
+                                        onChange={field.onChange}
+                                        value={field.value}
+                                        error={errors.password?.message}
+                                    />
+                                )}
                             />
+                        </div>
+                        <div className="w-full md:w-2/4">
+                            <Controller
+                                name="confirmPassword"
+                                control={control}
+                                defaultValue=""
+                                rules={{ required: 'Confirm Password is required' }}
+                                render={({ field }) => (
+                                    <Input
+                                        isRequired={true}
+                                        placeholder='Enter your confirm password'
+                                        id='confirmPassword'
+                                        type={'password'}
+                                        onChange={field.onChange}
+                                        value={field.value}
+                                        error={errors.confirmPassword?.message}
+                                        labelText='Confirm password'
+                                        labelClass='!text-sm'
+                                    />
 
-                        )}
-                    />
+                                )}
+                            />
+                        </div>
+                    </div>
 
                     <div className="">
                         <Controller

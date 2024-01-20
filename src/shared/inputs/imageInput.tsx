@@ -5,10 +5,14 @@ interface ImageInputProps {
     label?: string;
     labelClass?: string;
     selectedFile: File | null;
+    labelFor?: string;
+    error?: any;
+    isRequired: boolean;
+
 }
 
-const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass, selectedFile }) => {
-    
+const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass, selectedFile, labelFor, error, isRequired = false }) => {
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +45,21 @@ const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass
 
     return (
         <div className="relative">
-            <div className="col-span-full px-2 md:px-4 lg:px-6 mt-6">
-                {label && <label className={`block text-sm sm:text-base font-medium leading-6 text-black ${labelClass}`}>{label}</label>}
+            <div className="col-span-full mt-6">
+                {label && (
+                    <label
+                        htmlFor={labelFor}
+                        className={`text-sm font-medium leading-6 flex gap-1 text-black ${labelClass}`}
+                    >
+                        {label}
+                        {isRequired && <span className="text-red-500">*</span>}
+                    </label>
+                )}
+                {error && (
+                    <label htmlFor={labelFor} className={`error block text-sm font-medium leading-6 text-red-500 ${labelClass}`}>
+                        {error}
+                    </label>
+                )}
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
                     onDragOver={handleDragOver}
                     onDrop={handleDrop}
