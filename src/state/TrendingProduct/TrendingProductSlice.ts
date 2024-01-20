@@ -1,44 +1,45 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
-export const fetchtrendingProduct = createAsyncThunk(
-  'category/fetchtrendingProduct',
-  async (url: string | undefined) => {
-    const response = await axios.get(`${url}api/v1/product?fields=brand,name,category,product_list,ratings,images,description&totalSales[gt]=70&limit=8`);
+export const fetchProduct = createAsyncThunk(
+  'product/fetchProducts',
+  async ({ url, query }: { url: string | undefined, query: string | undefined }) => {
+    const response = await axios.get(`${url}api/v1/product${query}`);
     return response.data.data.products;
   }
 );
 
-interface TrendingProductState {
-  trendingProduct: Array<object>;
+
+interface productState {
+  product: Array<object>;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
 }
 
-const initialState: TrendingProductState = {
-  trendingProduct: [{}],
+const initialState: productState = {
+  product: [{}],
   status: 'idle',
   error: null,
 };
 
-const TrendingProductSlice = createSlice({
-  name: "Trending_Product",
+const productSlice = createSlice({
+  name: "product",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchtrendingProduct.pending, (state) => {
+      .addCase(fetchProduct.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchtrendingProduct.fulfilled, (state, action) => {
+      .addCase(fetchProduct.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.trendingProduct = action.payload;
+        state.product = action.payload;
       })
-      .addCase(fetchtrendingProduct.rejected, (state, action) => {
+      .addCase(fetchProduct.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch trendingProduct';
+        state.error = action.error.message || 'Failed to fetch product';
       });
   },
 });
 
-export default TrendingProductSlice.reducer;
+export default productSlice.reducer;

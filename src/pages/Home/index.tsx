@@ -1,7 +1,7 @@
 import React from 'react';
 import HomeBanner from '../../assets/HomeBanner.jpg';
 import { HomeBtn } from './data';
-import Button from '../../shared/Button';
+import Button from '../../shared/Button/Button';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {

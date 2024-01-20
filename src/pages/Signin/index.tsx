@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 
-import Input from '../../shared/Input';
-import ShowHidePassword from '../../shared/ShowHidePassword';
-import Button from '../../shared/Button';
+import Input from '../../shared/inputs/Input';
+import ShowHidePassword from '../../shared/inputs/ShowHidePassword';
+import Button from '../../shared/Button/Button';
 import Loader from '../../shared/Loader';
 import { toast } from 'react-toastify';
 
@@ -36,6 +36,9 @@ const SignInPage: React.FC = () => {
                 `${url}api/v1/auth`,
                 { email, password }
             );
+
+            console.log("Mado login uh",response.data);
+            
 
             if (response.status === 201) {
                 reset({ ...data, password: '' });

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, forwardRef, ForwardedRef } from 'react';
-import { InputType } from '../Types/default.types';
+import { InputType } from '../../Types/default.types';
 
 interface InputProps {
   onChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;

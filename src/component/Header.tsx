@@ -4,7 +4,7 @@ import Category from '../pages/Category'
 import TrendingProduct from '../pages/TrendingProduct'
 import OurService from '../pages/OurService/OurService'
 import Banner from '../assets/banner-4.jpg'
-import Button from '../shared/Button'
+import Button from '../shared/Button/Button'
 import HelpHome from '../pages/HelpHomeTab'
 
 const Header = () => {

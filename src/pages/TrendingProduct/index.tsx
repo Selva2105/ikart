@@ -2,22 +2,25 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../state/store';
 import { useSelector } from 'react-redux';
-import { fetchtrendingProduct } from '../../state/TrendingProduct/TrendingProductSlice';
 import Card from '../../shared/Card';
 import Loader from '../../shared/Loader';
+import { User } from '../../Types/default.types';
+import { fetchProduct } from '../../state/TrendingProduct/TrendingProductSlice';
 
 const TrendingProduct = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const trendingProduct = useSelector((state: RootState) => state.TrendingProduct.trendingProduct);
+    const product = useSelector((state: RootState) => state.TrendingProduct.product);
+    const userCredential = useSelector((state: RootState) => state.userCredential.userCredential) as User;
     const status = useSelector((state: RootState) => state.TrendingProduct.status);
     const error = useSelector((state: RootState) => state.TrendingProduct.error);
 
     const url = process.env.REACT_APP_API_URL;
+    const query = '?fields=brand,name,category,product_list,ratings,images,description&totalSales[gt]=70&limit=10'
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await dispatch(fetchtrendingProduct(url));
+                await dispatch(fetchProduct({ url, query }));
             } catch (error) {
                 console.log(error);
             }
@@ -42,9 +45,9 @@ const TrendingProduct = () => {
 
             {status === "succeeded" &&
                 <div className="flex flex-wrap flex-row gap-4 mt-6 justify-start">
-                    {trendingProduct.length > 0 ? (
-                        trendingProduct.map((data: any, index: number) => (
-                            <Card key={index} data={data} />
+                    {product.length > 0 ? (
+                        product.map((data: any, index: number) => (
+                            <Card key={index} data={data} wishList={userCredential.wishlist} />
                         ))
                     ) : (
                         <p>No trending products available</p>

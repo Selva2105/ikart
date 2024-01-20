@@ -5,6 +5,9 @@ module.exports = {
     "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js",],
   theme: {
     extend: {
+      gridTemplateRows: {
+        '[auto,auto,1fr]': 'auto auto 1fr',
+      },
       fontFamily: {
         inter: ["Inter", "sans-serif"],
       },
@@ -89,5 +92,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+  ],
 };

@@ -1,12 +1,13 @@
 import React, { Dispatch, SetStateAction } from 'react'
 import { navBtns, navLinks } from './data';
 import NavItem from './NavItem';
-import Button from '../../shared/Button';
+import Button from '../../shared/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../state/store';
 import { User } from '../../Types/default.types';
-import ProfileDropdown from '../../shared/ProfileDropdown';
+import ProfileDropdown from '../../shared/inputs/ProfileDropdown';
+import { RiBookmark3Fill, RiHeartFill, RiShoppingBagFill, RiUser3Fill } from 'react-icons/ri';
 
 interface sliderProps {
     openNav: boolean;
@@ -20,11 +21,10 @@ const MenuSlider: React.FC<sliderProps> = ({ openNav, setOpenNav }) => {
     const userCredential = useSelector((state: RootState) => state.userCredential.userCredential) as User;
 
     const options = [
-        { label: 'Profile', action: '/profile' },
-        { label: 'Your orders', action: '/yourOrders' },
-        { label: 'Wishlist', action: '/wishlist' },
-        { label: 'Premium', action: '/premium' },
-        { label: 'Sign out', action: '/signout' },
+        { label: 'Profile', action: `/profile/${userCredential._id}`, icon: <RiUser3Fill /> },
+        { label: 'Your orders', action: '/yourOrders', icon: <RiShoppingBagFill /> },
+        { label: 'Wishlist', action: '/wishlist', icon: <RiHeartFill /> },
+        { label: 'Premium', action: '/premium', icon: <RiBookmark3Fill className="text-hunyadi_yellow-400" /> },
     ];
 
     return (

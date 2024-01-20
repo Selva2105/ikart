@@ -1,5 +1,5 @@
 import React, { ChangeEvent, MouseEventHandler, useState } from 'react';
-import { InputType } from '../Types/default.types';
+import { InputType } from '../../Types/default.types';
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
 

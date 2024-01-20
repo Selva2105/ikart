@@ -1,16 +1,17 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import Input from '../../shared/Input';
-import ShowHidePassword from '../../shared/ShowHidePassword';
-import Button from '../../shared/Button';
+import Input from '../../shared/inputs/Input';
+import ShowHidePassword from '../../shared/inputs/ShowHidePassword';
+import Button from '../../shared/Button/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { RiGoogleFill } from 'react-icons/ri';
-import Dropdown from '../../shared/DropDown';
-import DateInput from '../../shared/DateInput';
-import CheckBox from '../../shared/CheckBox';
+import Dropdown from '../../shared/inputs/DropDown';
+import DateInput from '../../shared/inputs/DateInput';
+import CheckBox from '../../shared/inputs/CheckBox';
 import { useForm, Controller } from 'react-hook-form';
 import Loader from '../../shared/Loader';
 import { toast } from 'react-toastify';
+import ImageInput from '../../shared/inputs/imageInput';
 
 
 const Signup = () => {
@@ -32,23 +33,30 @@ const Signup = () => {
 
 
     const onSubmit = async (data: any) => {
-
         try {
-            setLoading(true); // Set loading to true on form submission
-            const response = await axios.post(
-                `${url}api/v1/user`, {
-                userName: data.firstName + " " + data.lastName,
-                email: data.email,
-                phoneNumber: {
-                    CountryCode: data.phoneNumberCode,
-                    Number: data.phoneNumber
-                },
-                dob: data.dob.startDate,
-                password: data.password,
-                confirmPassword: data.confirmPassword,
-                policyStatus: data.isChecked
+            setLoading(true);
+
+            // Convert data object to FormData
+            const formData = new FormData();
+            formData.append('userName', data.firstName + " " + data.lastName);
+            formData.append('email', data.email);
+            formData.append('phoneNumber[CountryCode]', data.phoneNumberCode);
+            formData.append('phoneNumber[Number]', data.phoneNumber);
+            formData.append('dob', data.dob.startDate);
+            formData.append('password', data.password);
+            formData.append('confirmPassword', data.confirmPassword);
+            formData.append('policyStatus', data.isChecked);
+
+            // Append profileImage if available
+            if (data.profileImage) {
+                formData.append('profileImage', data.profileImage[0]);
             }
-            );
+
+            const response = await axios.post(`${url}api/v1/user`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
             if (response.status === 201) {
                 localStorage.setItem('token', response.data.token);
@@ -65,12 +73,11 @@ const Signup = () => {
                 });
             }
 
-            setRes('User created go to ur email and verify to enjoy all features')
+            setRes('User created. Go to your email and verify to enjoy all features');
 
             setTimeout(() => {
                 navigate('/');
             }, 6000);
-
         } catch (error) {
             setLoading(false);
             if (axios.isAxiosError(error) && error.response) {
@@ -83,7 +90,6 @@ const Signup = () => {
         } finally {
             setLoading(false);
         }
-
     };
 
     return (
@@ -245,6 +251,19 @@ const Signup = () => {
                     />
 
                     <Controller
+                        name="profileImage"
+                        control={control}
+                        defaultValue={null}
+                        render={({ field }) => (
+                            <ImageInput
+                                onFileChange={(file) => field.onChange(file)}
+                                label="Profile Image"
+                                selectedFile={field.value}
+                            />
+                        )}
+                    />
+
+                    <Controller
                         name="password"
                         control={control}
                         defaultValue=""
@@ -310,7 +329,7 @@ const Signup = () => {
                 </form>
 
                 <div className="text-xs">
-                    Already having an iKart account ? click here to <Link to='/signup' className='text-princeton_orange-600'> Sign in </Link>
+                    Already having an iKart account ? click here to <Link to='/signup' className='text-princeton_orange-600'> Sign up </Link>
                 </div>
 
                 <div className="flex items-center justify-between w-full">

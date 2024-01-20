@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Button from './Button';
+import Button from '../Button/Button';
 import { RiUserSharedFill } from 'react-icons/ri';
 import axios from 'axios';
+import Loader from '../Loader';
 
 interface Option {
   label: string;
@@ -21,10 +22,25 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
 
   const url = process.env.REACT_APP_API_URL;
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+
   const handleProfileClick = () => {
     setDropdownVisible(!dropdownVisible);
   };
-
   const handleSignOut = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -34,7 +50,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
       }
 
       const apiUrl = `${url}api/v1/auth/logout`;
-      console.log('API URL:', apiUrl);
 
       const response = await axios.get(apiUrl, {
         headers: {
@@ -47,7 +62,6 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
         window.location.href = '/signin';
       }
 
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -56,9 +70,11 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
 
 
   return (
-    <div className="relative font-inter">
+    <div className="relative font-inter" ref={dropdownRef}>
 
-      <p className="text-gray-800 px-2 py-1 overflow-hidden whitespace-nowrap text-ellipsis max-w-[160px] cursor-pointer" onClick={handleProfileClick}>Hi, {profile ?? 'Chief'}</p>
+      <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center ring-2 ring-hunyadi_yellow-500 hover:bg-hunyadi_yellow-500 cursor-pointer hover:text-white transition-all duration-300" onClick={handleProfileClick}>
+        <p className='text-base font-medium '>{profile ? profile.charAt(0) : (<Loader className='!w-6 !h-6' />)}</p>
+      </div>
 
       {dropdownVisible && (
         <div className="absolute top-12 sm:left-0 md:left-auto md:right-0 bg-white border border-gray-200 p-2 rounded w-max">
@@ -66,7 +82,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
             <ul className="list-none p-0 m-0">
               {options.map((option, index) => (
                 <li key={index} className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
-                  <Link to={option.action}>
+                  <Link to={option.action} onClick={handleProfileClick} >
                     {option.label}
                   </Link>
                   {option.icon}

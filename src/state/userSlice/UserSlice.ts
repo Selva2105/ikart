@@ -3,19 +3,17 @@ import axios from "axios";
 
 export const fetchUserDetails = createAsyncThunk(
   "User_Credential/fetchUserDetails",
-  async ({
-    url,
-    token,
-  }: {
-    url: string | undefined;
-    token: string | null;
-  }) => {
-    const response = await axios.get(`${url}api/v1/user`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data.data.user;
+  async ({ url, token }: { url: string | undefined; token: string | null }) => {
+    try {
+      const response = await axios.get(`${url}api/v1/user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data.data.user;
+    } catch (error: any) {
+      throw error.response.data.message;
+    }
   }
 );
 
@@ -28,7 +26,7 @@ interface UserSlice {
 const initialState: UserSlice = {
   userCredential: {},
   status: "idle",
-  error: null,
+  error: "",
 };
 
 const userSlice = createSlice({
@@ -46,9 +44,9 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserDetails.rejected, (state, action) => {
         state.status = "failed";
-        state.error =
-          action.error.message || "Failed to fetch user credentials";
+        state.error = action.error.message || "Failed to fetch user credentials";
       });
+      
   },
 });
 

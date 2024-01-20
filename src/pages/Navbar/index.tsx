@@ -1,34 +1,42 @@
 import React, { useEffect, useState } from "react";
 import NavItem from "./NavItem";
 import { navLinks, navBtns } from "./data";
-import Input from "../../shared/Input";
+import Input from "../../shared/inputs/Input";
 import { useNavigate } from "react-router-dom";
-import Button from "../../shared/Button";
+import Button from "../../shared/Button/Button";
 import MenuSlider from "./MenuSlider";
 import { useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
 import { useSelector } from "react-redux";
 import { fetchUserDetails } from "../../state/userSlice/UserSlice";
 import { User } from "../../Types/default.types";
-import ProfileDropdown from "../../shared/ProfileDropdown";
+import ProfileDropdown from "../../shared/inputs/ProfileDropdown";
 import { RiUser3Fill } from "react-icons/ri";
 import { RiShoppingBagFill } from "react-icons/ri";
 import { RiHeartFill } from "react-icons/ri";
 import { RiBookmark3Fill } from "react-icons/ri";
+import SideSlider from "../../shared/Slider";
+import { RiShoppingCartFill } from "react-icons/ri";
+import CartSlider from "../Cart/CartSlider";
 
 const Navbar: React.FC<{}> = () => {
     const navigate = useNavigate();
 
     const [openNav, setOpenNav] = useState(false);
+    const [showSlider, setShowSlider] = useState(false);
 
     const url = process.env.REACT_APP_API_URL;
     const token = localStorage.getItem('token')
 
     const dispatch = useDispatch<AppDispatch>();
     const userCredential = useSelector((state: RootState) => state.userCredential.userCredential) as User;
+    const status = useSelector((state: RootState) => state.userCredential.status);
+    const error = useSelector((state: RootState) => state.userCredential.error);
+
+    console.log("User Error", userCredential);
 
     const options = [
-        { label: 'Profile', action: '/profile', icon: <RiUser3Fill /> },
+        { label: 'Profile', action: `/profile/${userCredential._id}`, icon: <RiUser3Fill /> },
         { label: 'Your orders', action: '/yourOrders', icon: <RiShoppingBagFill /> },
         { label: 'Wishlist', action: '/wishlist', icon: <RiHeartFill /> },
         { label: 'Premium', action: '/premium', icon: <RiBookmark3Fill className="text-hunyadi_yellow-400" /> },
@@ -39,13 +47,19 @@ const Navbar: React.FC<{}> = () => {
             try {
                 await dispatch(fetchUserDetails({ url, token }));
             } catch (error) {
-                console.log(error);
+                console.log("Error from user fetch", error);
             }
         };
-        fetchData();
-    }, [dispatch, url, token]);
 
-    console.log("user", userCredential);
+        if (token) {
+            fetchData();
+        }
+
+        if (error === "jwt expired" || error === "jwt malformed") {
+            localStorage.removeItem('token')
+            localStorage.removeItem('email')
+        }
+    }, [dispatch, url, token, error]);
 
     return (
         <>
@@ -53,7 +67,7 @@ const Navbar: React.FC<{}> = () => {
                 <div className="flex justify-between items-start lg:items-center flex-col md:flex-row w-full md:w-[70%] lg:w-[60%] xl:w-[70%] gap-4">
                     <div className="flex">
                         <div
-                            className="font-inter text-sm font-semibold"
+                            className="font-inter text-sm font-semibold cursor-pointer"
                             onClick={() => navigate("/")}
                         >
                             IKart
@@ -94,12 +108,21 @@ const Navbar: React.FC<{}> = () => {
                     </div>
                 </div>
 
-                <div className="hidden lg:flex justify-end">
+                <div className="hidden xl:flex justify-end">
                     <div id="btns-container" className='flex gap-8'>
                         {token ? (
                             userCredential ? (
-                                <div className="">
+                                <div className="flex gap-8">
+                                    <SideSlider
+                                        setShowSlider={setShowSlider}
+                                        showSlider={showSlider}
+                                        icon={<RiShoppingCartFill className="w-6 h-6" />}
+                                        title='Your cart'
+                                        content={<CartSlider />}
+                                    />
+
                                     <ProfileDropdown profile={userCredential.userName} options={options} />
+
                                 </div>
                             ) : (
                                 <span>Loading...</span>
