@@ -33,6 +33,7 @@ const Signup = () => {
 
 
     const onSubmit = async (data: any) => {
+
         try {
             setLoading(true);
 
@@ -49,7 +50,7 @@ const Signup = () => {
 
             // Append profileImage if available
             if (data.profileImage) {
-                formData.append('profileImage', data.profileImage[0]);
+                formData.append('profileImage', data.profileImage);
             }
 
             const response = await axios.post(`${url}api/v1/user`, formData, {
@@ -101,7 +102,7 @@ const Signup = () => {
                 <p className='text-sm text-center !my-2 text-red-500'>{error}</p>
                 {res && <p className='text-sm text-center !my-2 text-white bg-green-500 hover:bg-green-300 py-2 rounded-lg'>{res}</p>}
 
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" encType="multipart/form-data">
 
                     <div className="w-full flex flex-col md:flex-row gap-4">
 
@@ -324,12 +325,12 @@ const Signup = () => {
 
                     </div>
 
-                    <Button title='Login' styles={`text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300 ${loading ? 'hover:!bg-hunyadi_yellow-500' : ""}`} type='submit' >{loading ? <Loader color='white' className='!h-6 !w-6' /> : 'Sign in'}</Button>
+                    <Button title='Login' styles={`text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300 ${loading ? 'hover:!bg-hunyadi_yellow-500' : ""}`} type='submit' >{loading ? <Loader color='white' className='!h-6 !w-6' /> : 'Sign up'}</Button>
 
                 </form>
 
                 <div className="text-xs">
-                    Already having an iKart account ? click here to <Link to='/signup' className='text-princeton_orange-600'> Sign up </Link>
+                    Already having an iKart account ? click here to <Link to='/signup' className='text-princeton_orange-600'> Sign in </Link>
                 </div>
 
                 <div className="flex items-center justify-between w-full">
