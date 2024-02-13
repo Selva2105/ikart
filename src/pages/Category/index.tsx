@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
-import { fetchCategories } from '../../state/categorySlice/categorySlice';
+import { AppDispatch, RootState } from '../../app/store';
+import { fetchCategories } from '../../features/categorySlice/categorySlice';
 import CategoryCard from './CategoryCard';
-import Loader from '../../shared/Loader';
+import TruckLoader from '../../shared/TruckLoader/TruckLoader';
 
 const Category = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -32,7 +32,7 @@ const Category = () => {
 
       {status === 'loading' && (
         <div className="flex items-center justify-center h-screen">
-          <Loader />
+          <TruckLoader />
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 interface ImageInputProps {
     onFileChange: (file: File | null) => void;
@@ -6,19 +6,37 @@ interface ImageInputProps {
     labelClass?: string;
     selectedFile: File | null;
     labelFor?: string;
-    error?: any;
     isRequired: boolean;
-
+    fileType?: string[];
+    sizeLimit?: string;
 }
 
-const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass, selectedFile, labelFor, error, isRequired = false }) => {
+const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass, selectedFile, labelFor, isRequired = false, fileType = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'], sizeLimit }) => {
 
     const inputRef = useRef<HTMLInputElement>(null);
+    const [error, setError] = useState('')
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileList = event.target.files;
         if (fileList && fileList.length > 0) {
-            onFileChange(fileList[0]);
+            const selected = fileList[0];
+
+            // Check file type
+            if (!fileType.includes(selected.type)) {
+                onFileChange(null);
+                setError(`Please select a valid image file (${fileType.join(', ')})`);
+                return;
+            }
+
+            // Check file size (3MB limit)
+            const maxSize = 3 * 1024 * 1024; // 3MB
+            if (selected.size > maxSize) {
+                onFileChange(null);
+                alert('File size exceeds the limit (3Mb).');
+                return;
+            }
+
+            onFileChange(selected);
         } else {
             onFileChange(null);
         }
@@ -39,7 +57,7 @@ const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass
 
         const fileList = event.dataTransfer.files;
         if (fileList && fileList.length > 0) {
-            onFileChange(fileList[0]);
+            handleFileChange({ target: { files: fileList } } as React.ChangeEvent<HTMLInputElement>);
         }
     };
 
@@ -71,7 +89,7 @@ const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass
                         <div className="mt-4 flex text-sm leading-6 text-gray-600">
                             <label
                                 onClick={handleClick}
-                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500">
+                                className="relative cursor-pointer rounded-md bg-white font-semibold text-hunyadi_yellow hover:text-hunyadi_yellow-500">
                                 <span>Upload a file</span>
                                 <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange}
                                 />
@@ -80,7 +98,7 @@ const ImageInput: React.FC<ImageInputProps> = ({ onFileChange, label, labelClass
                         </div>
                         <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
                         {selectedFile &&
-                            <span className="relative cursor-pointer rounded-md bg-white font-medium text-sm leading-6 text-indigo-600 hover:text-indigo-500">
+                            <span className="relative cursor-pointer rounded-md bg-white font-medium text-sm leading-6 text-hunyadi_yellow hover:text-hunyadi_yellow-500">
                                 <span>{`File : ${selectedFile.name}`}</span>
                             </span>}
                     </div>

@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import categoryReducer from "./categorySlice/categorySlice";
-import TrendingProductReducer from "./TrendingProduct/TrendingProductSlice";
-import userCredentialReducer from './userSlice/UserSlice'
+import categoryReducer from "../features/categorySlice/categorySlice";
+import TrendingProductReducer from "../features/TrendingProduct/TrendingProductSlice";
+import userCredentialReducer from '../features/userSlice/UserSlice'
 
 export const store = configureStore({
   reducer: {

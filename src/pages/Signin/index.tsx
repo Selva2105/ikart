@@ -7,8 +7,8 @@ import { useForm, Controller } from 'react-hook-form';
 import Input from '../../shared/inputs/Input';
 import ShowHidePassword from '../../shared/inputs/ShowHidePassword';
 import Button from '../../shared/Button/Button';
-import Loader from '../../shared/Loader';
 import { toast } from 'react-toastify';
+import Spinner from '../../shared/Spinner';
 
 
 const SignInPage: React.FC = () => {
@@ -134,7 +134,7 @@ const SignInPage: React.FC = () => {
                         type='submit'
                         disabled={loading}
                     >
-                        {loading ? <Loader color='white' className='!h-6 !w-6' /> : 'Login'}
+                        {loading ? <Spinner color='white' className='!h-6 !w-6' /> : 'Login'}
                     </Button>
 
                 </form>

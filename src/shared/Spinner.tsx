@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 
-interface LoaderProps {
+interface SpinnerProps {
   color?: string;
   className?:string;
 }
 
-const Loader: FC<LoaderProps> = ({ color = 'ash_gray',className }) => {
+const Spinner: FC<SpinnerProps> = ({ color = 'ash_gray',className }) => {
   return (
     <div
       className={`inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-${color} motion-reduce:animate-[spin_1.5s_linear_infinite] ${className}`}
@@ -20,4 +20,4 @@ const Loader: FC<LoaderProps> = ({ color = 'ash_gray',className }) => {
   );
 };
 
-export default Loader;
+export default Spinner;

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Button from '../Button/Button';
 import { RiUserSharedFill } from 'react-icons/ri';
 import axios from 'axios';
-import Loader from '../Loader';
 
 interface Option {
   label: string;
@@ -67,39 +66,33 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ profile, options }) =
     }
   };
 
+  console.log();
 
 
   return (
     <div className="relative font-inter" ref={dropdownRef}>
 
       <div className="bg-white w-10 h-10 rounded-full flex items-center justify-center ring-2 ring-hunyadi_yellow-500 hover:bg-hunyadi_yellow-500 cursor-pointer hover:text-white transition-all duration-300" onClick={handleProfileClick}>
-        <p className='text-base font-medium '>{profile ? profile.charAt(0) : (<Loader className='!w-6 !h-6' />)}</p>
+        <img src={profile} alt="" className='w-10 h-10 rounded-full object-cover' />
       </div>
 
       {dropdownVisible && (
         <div className="absolute top-12 sm:left-0 md:left-auto md:right-0 bg-white border border-gray-200 p-2 rounded w-max">
-          {profile ? (
-            <ul className="list-none p-0 m-0">
-              {options.map((option, index) => (
-                <li key={index} className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
-                  <Link to={option.action} onClick={handleProfileClick} >
-                    {option.label}
-                  </Link>
-                  {option.icon}
-                </li>
-              ))}
-              <Button styles='cursor-pointer p-2 rounded-lg flex flex-row justify-between items-center gap-6 bg-red-500 w-full hover:bg-transparent hover:text-red-500 text-white hover:text-red-500 hover:border-red-500 border-2' title='Sign out' handleClick={handleSignOut} >
-                <span>Sign out</span>
-                {<RiUserSharedFill className='' />}
-              </Button>
-            </ul>) : (
-            <ul className="list-none p-0 m-0">
-              <li className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
-                Hey chief, verify your email to continue ..!
+
+          <ul className="list-none p-0 m-0">
+            {options.map((option, index) => (
+              <li key={index} className="cursor-pointer hover:bg-gray-100 p-2 rounded-lg flex flex-row justify-between items-center gap-6">
+                <Link to={option.action} onClick={handleProfileClick} >
+                  {option.label}
+                </Link>
+                {option.icon}
               </li>
-            </ul>
-          )
-          }
+            ))}
+            <Button styles='cursor-pointer p-2 rounded-lg flex flex-row justify-between items-center gap-6 bg-red-500 w-full hover:bg-transparent hover:text-red-500 text-white hover:text-red-500 hover:border-red-500 border-2' title='Sign out' handleClick={handleSignOut} >
+              <span>Sign out</span>
+              {<RiUserSharedFill className='' />}
+            </Button>
+          </ul>
         </div>
       )}
 

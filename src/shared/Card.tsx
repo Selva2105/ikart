@@ -99,7 +99,7 @@ const Card: React.FC<CardProps> = ({ data, wishList }) => {
                         className='object-cover w-full h-full rounded-md' />
                 </div>
 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center my-4">
                     <div className="flex flex-col gap-2 ">
                         <h2 className='text-xs font-semibold font-inter'>{data?.name}</h2>
                         <p className='text-xs font-inter overflow-hidden whitespace-nowrap text-ellipsis max-w-[300px]'>{data?.description}</p>
@@ -128,7 +128,7 @@ const Card: React.FC<CardProps> = ({ data, wishList }) => {
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center my-4">
                     <div className="flex flex-col items-start">
                         <p className='text-[0.8rem] font-inter'>Price</p>
                         <p className='text-sm font-semibold font-inter'>₹{data?.product_list?.[0]?.price || 0}.00</p>

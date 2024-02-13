@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
+import { AppDispatch, RootState } from '../../app/store';
 import { useSelector } from 'react-redux';
 import Card from '../../shared/Card';
-import Loader from '../../shared/Loader';
 import { User } from '../../Types/default.types';
-import { fetchProduct } from '../../state/TrendingProduct/TrendingProductSlice';
+import { fetchProduct } from '../../features/TrendingProduct/TrendingProductSlice';
+import TruckLoader from '../../shared/TruckLoader/TruckLoader';
 
 const TrendingProduct = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +37,7 @@ const TrendingProduct = () => {
 
             {status === 'loading' && (
                 <div className="flex items-center justify-center h-screen">
-                    <Loader />
+                    <TruckLoader />
                 </div>
             )}
 

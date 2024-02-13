@@ -1,7 +1,6 @@
 import React from 'react';
-import avatar from '../assets/avatar.webp';
 import { useSelector } from 'react-redux';
-import { RootState } from '../state/store';
+import { RootState } from '../app/store';
 import { User } from '../Types/default.types';
 
 const Profile = () => {
@@ -9,8 +8,8 @@ const Profile = () => {
 
   return (
     <div className='w-full h-40 bg-hunyadi_yellow-500'>
-      <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center ring-2 ring-hunyadi_yellow-500 mx-10 my-11">
-        <p className='text-xl font-semibold'>{userCredential?.userName?.charAt(0)}</p> 
+      <div className="bg-white w-28 h-28 rounded-full flex items-center justify-center ring-2 ring-hunyadi_yellow-500 mx-10 ">
+        <img className='w-28 h-28 rounded-full object-cover' src={userCredential.profileImage} alt='profile' />
       </div>
     </div>
   );

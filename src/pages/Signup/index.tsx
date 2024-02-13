@@ -9,9 +9,9 @@ import Dropdown from '../../shared/inputs/DropDown';
 import DateInput from '../../shared/inputs/DateInput';
 import CheckBox from '../../shared/inputs/CheckBox';
 import { useForm, Controller } from 'react-hook-form';
-import Loader from '../../shared/Loader';
 import { toast } from 'react-toastify';
 import ImageInput from '../../shared/inputs/imageInput';
+import TextLoader from '../../shared/TextLoader';
 
 
 const Signup = () => {
@@ -22,6 +22,7 @@ const Signup = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [show, setShow] = useState<boolean>(false);
     const options = ['+91', '+94', '+977'];
+    const texts = ['Loading', 'Please wait', 'Almost there', 'Just a moment', 'Almost done!'];
 
     const handleTogglePassword = () => {
         setShow((prev) => !prev);
@@ -50,7 +51,7 @@ const Signup = () => {
 
             // Append profileImage if available
             if (data.profileImage) {
-                formData.append('profileImage', data.profileImage);
+                formData.append('image', data.profileImage);
             }
 
             const response = await axios.post(`${url}api/v1/user`, formData, {
@@ -269,6 +270,7 @@ const Signup = () => {
                                 label="Profile Image"
                                 selectedFile={field.value}
                                 isRequired={true}
+                                sizeLimit='5mb'
                             />
                         )}
                     />
@@ -339,8 +341,7 @@ const Signup = () => {
 
                     </div>
 
-                    <Button title='Login' styles={`text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300 ${loading ? 'hover:!bg-hunyadi_yellow-500' : ""}`} type='submit' >{loading ? <Loader color='white' className='!h-6 !w-6' /> : 'Sign up'}</Button>
-
+                    <Button title='Login' styles={`text-center w-full text-sm font-medium border-2 border-hunyadi_yellow-500 py-2 rounded-lg hover:text-hunyadi_yellow-500 text-white bg-hunyadi_yellow-500 hover:bg-transparent transition-all duration-300 ${loading ? 'hover:!bg-hunyadi_yellow-500' : ""}`} type='submit' >{loading ? <TextLoader texts={texts} /> : "Signup"}</Button>
                 </form>
 
                 <div className="text-xs">

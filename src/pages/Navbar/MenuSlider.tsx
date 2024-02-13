@@ -4,7 +4,7 @@ import NavItem from './NavItem';
 import Button from '../../shared/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../state/store';
+import { RootState } from '../../app/store';
 import { User } from '../../Types/default.types';
 import ProfileDropdown from '../../shared/inputs/ProfileDropdown';
 import { RiBookmark3Fill, RiHeartFill, RiShoppingBagFill, RiUser3Fill } from 'react-icons/ri';
@@ -33,7 +33,7 @@ const MenuSlider: React.FC<sliderProps> = ({ openNav, setOpenNav }) => {
                 }`}
         >
             <div className="flex flex-col gap-4 w-full md:flex-row items-start md:items-center ">
-                <div className="flex gap-6 w-full lg:justify-center">
+                <div className="flex gap-6 w-full lg:start">
                     {navLinks.links.map((link, index) => (
                         <NavItem key={index} label={link.label} url={link.url} className='font-inter font-medium text-sm' />
                     ))}

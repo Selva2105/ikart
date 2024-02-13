@@ -19,6 +19,7 @@ export interface User {
   role: string;
   verified: boolean;
   lastUpdate: string;
+  profileImage:string;
   cart: [
     {
       product: string;

@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../shared/Button/Button";
 import MenuSlider from "./MenuSlider";
 import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../state/store";
+import { AppDispatch, RootState } from "../../app/store";
 import { useSelector } from "react-redux";
-import { fetchUserDetails } from "../../state/userSlice/UserSlice";
+import { fetchUserDetails } from "../../features/userSlice/UserSlice";
 import { User } from "../../Types/default.types";
 import ProfileDropdown from "../../shared/inputs/ProfileDropdown";
 import { RiUser3Fill } from "react-icons/ri";
@@ -64,7 +64,7 @@ const Navbar: React.FC<{}> = () => {
     return (
         <>
             <nav className="w-full fixed top-0 z-10 p-4 xl:px-20 flex flex-row justify-between items-start md:items-center bg-white">
-                <div className="flex justify-between items-start lg:items-center flex-col md:flex-row w-full md:w-[70%] lg:w-[60%] xl:w-[70%] gap-4">
+                <div className="flex justify-between items-start lg:items-center flex-col md:flex-row w-full md:w-[70%] lg:w-[60%] xl:w-[60%] gap-4">
                     <div className="flex">
                         <div
                             className="font-inter text-sm font-semibold cursor-pointer"
@@ -80,32 +80,6 @@ const Navbar: React.FC<{}> = () => {
                         ))}
                     </div>
 
-                    <div className="w-full md:w-2/4 xl:w-[30%] flex gap-4 items-end">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="w-6 h-6"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                            />
-                        </svg>
-
-                        <Input
-                            name="search"
-                            id="type"
-                            type="text"
-                            inputClass="bg-hunyadi_yellow !rounded-3xl !px-3 !py-1 !border-none text-xs text-black focus:outline-none w-full"
-                            placeholder=""
-                            isRequired={false}
-
-                        />
-                    </div>
                 </div>
 
                 <div className="hidden xl:flex justify-end">
@@ -121,7 +95,7 @@ const Navbar: React.FC<{}> = () => {
                                         content={<CartSlider />}
                                     />
 
-                                    <ProfileDropdown profile={userCredential.userName} options={options} />
+                                    <ProfileDropdown profile={userCredential.profileImage} options={options} />
 
                                 </div>
                             ) : (

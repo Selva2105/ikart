@@ -38,7 +38,7 @@ const CategoryCard: React.FC<CardProps> = ({ title }) => {
     const { icon, products } = renderIcon(title);
 
     return (
-        <div className='bg-[#E9E9E9] px-6 py-4 w-full md:w-[31%] lg:w-[30%] xl:w-1/5 font-inter rounded-lg cursor-pointer hover:shadow-lg'>
+        <div className='bg-[#E9E9E9] px-6 py-4 w-full md:w-[31%] lg:w-[30%] xl:w-[23%] font-inter rounded-lg cursor-pointer hover:shadow-lg'>
             <div className='flex justify-end'>
                 <img src={assuredBandage} alt='Bandage' />
             </div>
